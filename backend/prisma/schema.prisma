@@ -1,13 +1,97 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  TORCEDOR
+}
+
+enum ChampionshipFormat {
+  PONTOS_CORRIDOS
+  MATA_MATA
+}
+
+enum MatchStatus {
+  AGENDADA
+  FINALIZADA
+  CANCELADA
+}
+
+model User {
+  id           String       @id @default(uuid())
+  name         String
+  email        String       @unique
+  passwordHash String
+  role         Role         @default(TORCEDOR)
+  createdAt    DateTime     @default(now())
+  predictions  Prediction[]
+}
+
+model Team {
+  id          String   @id @default(uuid())
+  name        String
+  region      String
+  foundedYear Int?
+  logoUrl     String?
+  description String?
+  players     Player[]
+  homeMatches Match[]  @relation("HomeTeam")
+  awayMatches Match[]  @relation("AwayTeam")
+}
+
+model Player {
+  id       String  @id @default(uuid())
+  name     String
+  position String
+  number   Int
+  photoUrl String?
+  teamId   String
+  team     Team    @relation(fields: [teamId], references: [id])
+}
+
+model Championship {
+  id        String             @id @default(uuid())
+  name      String
+  season    String
+  format    ChampionshipFormat
+  startDate DateTime
+  endDate   DateTime
+  matches   Match[]
+}
+
+model Match {
+  id             String       @id @default(uuid())
+  championshipId String
+  championship   Championship @relation(fields: [championshipId], references: [id])
+  homeTeamId     String
+  homeTeam       Team         @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeamId     String
+  awayTeam       Team         @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  round          Int
+  kickoffAt      DateTime
+  homeScore      Int?
+  awayScore      Int?
+  status         MatchStatus  @default(AGENDADA)
+  predictions    Prediction[]
+}
+
+model Prediction {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  matchId       String
+  match         Match    @relation(fields: [matchId], references: [id])
+  predictedHome Int
+  predictedAway Int
+  pointsEarned  Int?
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, matchId])
 }

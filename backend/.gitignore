@@ -46,3 +46,6 @@ pids
 *.pid
 *.seed
 *.pid.lock
+
+# Prisma generated client
+/generated
