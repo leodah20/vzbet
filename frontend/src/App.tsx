@@ -1,8 +1,16 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AuthProvider } from './context/AuthContext'
+import { AppRouter } from './router'
+
+const queryClient = new QueryClient()
+
 function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-brand-surface">
-      <h1 className="text-2xl font-bold text-brand-blue-dark">VZBet</h1>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
+    </QueryClientProvider>
   )
 }
 

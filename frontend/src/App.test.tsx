@@ -1,10 +1,15 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import App from './App'
 
 describe('App', () => {
-  it('renders the VZBet heading', () => {
+  beforeEach(() => {
+    localStorage.clear()
+    window.history.pushState({}, '', '/')
+  })
+
+  it('redirects an anonymous visitor to the login screen', async () => {
     render(<App />)
-    expect(screen.getByText('VZBet')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Entrar' })).toBeInTheDocument()
   })
 })
