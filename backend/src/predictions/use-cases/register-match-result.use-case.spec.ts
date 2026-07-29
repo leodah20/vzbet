@@ -7,6 +7,7 @@ describe('RegisterMatchResultUseCase', () => {
     return {
       upsert: jest.fn(),
       findByMatchId: jest.fn(),
+      findByUserId: jest.fn(),
       updatePoints: jest.fn(),
       registerResultAndScorePredictions: jest.fn(),
       findScoredPredictions: jest.fn(),

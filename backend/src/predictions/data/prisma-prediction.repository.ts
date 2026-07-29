@@ -18,6 +18,10 @@ export class PrismaPredictionRepository implements PredictionRepository {
     return this.prisma.prediction.findMany({ where: { matchId } });
   }
 
+  findByUserId(userId: string): Promise<Prediction[]> {
+    return this.prisma.prediction.findMany({ where: { userId } });
+  }
+
   async updatePoints(id: string, points: number): Promise<void> {
     await this.prisma.prediction.update({ where: { id }, data: { pointsEarned: points } });
   }
