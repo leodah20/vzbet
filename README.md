@@ -1,4 +1,4 @@
-# Várzea Palpites
+# VZBet
 
 App de palpites de placar para times de futebol de várzea (amador/local). Torcedores dão o palpite do placar de cada partida, ganham pontos conforme a regra abaixo, e disputam um ranking. O app nunca movimenta dinheiro real — qualquer prêmio é combinado pelo grupo por fora.
 
