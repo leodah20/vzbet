@@ -18,7 +18,7 @@ export class GetRankingUseCase {
 
     return Array.from(totals.values()).sort((a, b) => {
       if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
-      return a.userName.localeCompare(b.userName); // tie-break: alphabetical by name
+      return a.userName.localeCompare(b.userName, 'pt-BR'); // tie-break: alphabetical by name
     });
   }
 }

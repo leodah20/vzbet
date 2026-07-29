@@ -19,7 +19,7 @@ export class PrismaPredictionRepository implements PredictionRepository {
   }
 
   findByUserId(userId: string): Promise<Prediction[]> {
-    return this.prisma.prediction.findMany({ where: { userId } });
+    return this.prisma.prediction.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } });
   }
 
   // This repository is nominally about predictions, but registering a match result and scoring
@@ -49,7 +49,11 @@ export class PrismaPredictionRepository implements PredictionRepository {
         pointsEarned: { not: null },
         ...(championshipId ? { match: { championshipId } } : {}),
       },
-      include: { user: true },
+      select: {
+        userId: true,
+        pointsEarned: true,
+        user: { select: { name: true } },
+      },
     });
 
     return predictions.map((prediction) => ({
