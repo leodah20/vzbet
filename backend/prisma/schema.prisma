@@ -24,6 +24,12 @@ enum MatchStatus {
   CANCELADA
 }
 
+enum PredictedOutcome {
+  CASA
+  EMPATE
+  FORA
+}
+
 model User {
   id           String       @id @default(uuid())
   name         String
@@ -83,15 +89,16 @@ model Match {
 }
 
 model Prediction {
-  id            String   @id @default(uuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id])
-  matchId       String
-  match         Match    @relation(fields: [matchId], references: [id])
-  predictedHome Int
-  predictedAway Int
-  pointsEarned  Int?
-  createdAt     DateTime @default(now())
+  id               String           @id @default(uuid())
+  userId           String
+  user             User             @relation(fields: [userId], references: [id])
+  matchId          String
+  match            Match            @relation(fields: [matchId], references: [id])
+  predictedOutcome PredictedOutcome
+  predictedHome    Int?
+  predictedAway    Int?
+  pointsEarned     Int?
+  createdAt        DateTime         @default(now())
 
   @@unique([userId, matchId])
 }
