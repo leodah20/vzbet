@@ -30,15 +30,19 @@ export class RegisterMatchResultUseCase {
       throw new ValidationError('Score cannot be negative');
     }
 
-    await this.matchRepository.registerResult(data.matchId, data.homeScore, data.awayScore);
-
     const predictions = await this.predictionRepository.findByMatchId(data.matchId);
-    for (const prediction of predictions) {
-      const points = calculatePredictionPoints(
+    const scoredPredictions = predictions.map((prediction) => ({
+      predictionId: prediction.id,
+      points: calculatePredictionPoints(
         { predictedHome: prediction.predictedHome, predictedAway: prediction.predictedAway },
         { homeScore: data.homeScore, awayScore: data.awayScore },
-      );
-      await this.predictionRepository.updatePoints(prediction.id, points);
-    }
+      ),
+    }));
+
+    await this.predictionRepository.registerResultAndScorePredictions(
+      data.matchId,
+      { homeScore: data.homeScore, awayScore: data.awayScore },
+      scoredPredictions,
+    );
   }
 }

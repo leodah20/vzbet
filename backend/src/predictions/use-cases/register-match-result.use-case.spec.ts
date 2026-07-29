@@ -4,7 +4,13 @@ import { MatchRepository } from '../../matches/domain/match-repository.interface
 
 describe('RegisterMatchResultUseCase', () => {
   function makePredictionRepository(): jest.Mocked<PredictionRepository> {
-    return { upsert: jest.fn(), findByMatchId: jest.fn(), updatePoints: jest.fn(), getRanking: jest.fn() };
+    return {
+      upsert: jest.fn(),
+      findByMatchId: jest.fn(),
+      updatePoints: jest.fn(),
+      registerResultAndScorePredictions: jest.fn(),
+      getRanking: jest.fn(),
+    };
   }
   function makeMatchRepository(): jest.Mocked<MatchRepository> {
     return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn(), updateStatus: jest.fn(), registerResult: jest.fn() };
@@ -26,9 +32,15 @@ describe('RegisterMatchResultUseCase', () => {
 
     await useCase.execute({ matchId: 'm1', homeScore: 2, awayScore: 1 });
 
-    expect(matchRepository.registerResult).toHaveBeenCalledWith('m1', 2, 1);
-    expect(predictionRepository.updatePoints).toHaveBeenCalledWith('p1', 3);
-    expect(predictionRepository.updatePoints).toHaveBeenCalledWith('p2', 0);
+    expect(predictionRepository.registerResultAndScorePredictions).toHaveBeenCalledTimes(1);
+    expect(predictionRepository.registerResultAndScorePredictions).toHaveBeenCalledWith(
+      'm1',
+      { homeScore: 2, awayScore: 1 },
+      [
+        { predictionId: 'p1', points: 3 },
+        { predictionId: 'p2', points: 0 },
+      ],
+    );
   });
 
   it('throws when the match result was already registered', async () => {
@@ -40,7 +52,7 @@ describe('RegisterMatchResultUseCase', () => {
     await expect(useCase.execute({ matchId: 'm1', homeScore: 1, awayScore: 0 })).rejects.toThrow(
       'Match result was already registered',
     );
-    expect(matchRepository.registerResult).not.toHaveBeenCalled();
+    expect(predictionRepository.registerResultAndScorePredictions).not.toHaveBeenCalled();
   });
 
   it('throws when the match was cancelled', async () => {
@@ -52,7 +64,6 @@ describe('RegisterMatchResultUseCase', () => {
     await expect(useCase.execute({ matchId: 'm1', homeScore: 1, awayScore: 0 })).rejects.toThrow(
       'Cannot register a result for a cancelled match',
     );
-    expect(matchRepository.registerResult).not.toHaveBeenCalled();
-    expect(predictionRepository.updatePoints).not.toHaveBeenCalled();
+    expect(predictionRepository.registerResultAndScorePredictions).not.toHaveBeenCalled();
   });
 });
