@@ -1,9 +1,9 @@
-import { Match, MatchRepository } from '../domain/match-repository.interface';
+import { Match, MatchFilter, MatchRepository } from '../domain/match-repository.interface';
 
 export class ListMatchesUseCase {
   constructor(private readonly matchRepository: MatchRepository) {}
 
-  execute(): Promise<Match[]> {
-    return this.matchRepository.findAll();
+  execute(filter?: MatchFilter): Promise<Match[]> {
+    return this.matchRepository.findAll(filter);
   }
 }

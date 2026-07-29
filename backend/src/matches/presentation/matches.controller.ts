@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../auth/presentation/jwt-auth.guard';
 import { RolesGuard } from '../../auth/presentation/roles.guard';
 import { Roles } from '../../auth/presentation/roles.decorator';
@@ -7,7 +7,7 @@ import { ScheduleMatchUseCase } from '../use-cases/schedule-match.use-case';
 import { CancelMatchUseCase } from '../use-cases/cancel-match.use-case';
 import { ListMatchesUseCase } from '../use-cases/list-matches.use-case';
 import { MATCH_REPOSITORY } from '../domain/match-repository.interface';
-import type { MatchRepository } from '../domain/match-repository.interface';
+import type { MatchRepository, MatchStatus } from '../domain/match-repository.interface';
 import { TEAM_REPOSITORY } from '../../teams/domain/team-repository.interface';
 import type { TeamRepository } from '../../teams/domain/team-repository.interface';
 import { CHAMPIONSHIP_REPOSITORY } from '../../championships/domain/championship-repository.interface';
@@ -22,8 +22,12 @@ export class MatchesController {
   ) {}
 
   @Get()
-  list() {
-    return new ListMatchesUseCase(this.matchRepository).execute();
+  list(
+    @Query('teamId') teamId?: string,
+    @Query('championshipId') championshipId?: string,
+    @Query('status') status?: MatchStatus,
+  ) {
+    return new ListMatchesUseCase(this.matchRepository).execute({ teamId, championshipId, status });
   }
 
   @Post()

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Match, MatchRepository, MatchStatus, ScheduleMatchData } from '../domain/match-repository.interface';
+import { Match, MatchFilter, MatchRepository, MatchStatus, ScheduleMatchData } from '../domain/match-repository.interface';
 
 @Injectable()
 export class PrismaMatchRepository implements MatchRepository {
@@ -10,8 +10,15 @@ export class PrismaMatchRepository implements MatchRepository {
     return this.prisma.match.create({ data });
   }
 
-  findAll(): Promise<Match[]> {
-    return this.prisma.match.findMany({ orderBy: { kickoffAt: 'asc' } });
+  findAll(filter?: MatchFilter): Promise<Match[]> {
+    return this.prisma.match.findMany({
+      where: {
+        ...(filter?.championshipId ? { championshipId: filter.championshipId } : {}),
+        ...(filter?.status ? { status: filter.status } : {}),
+        ...(filter?.teamId ? { OR: [{ homeTeamId: filter.teamId }, { awayTeamId: filter.teamId }] } : {}),
+      },
+      orderBy: { kickoffAt: 'asc' },
+    });
   }
 
   findById(id: string): Promise<Match | null> {

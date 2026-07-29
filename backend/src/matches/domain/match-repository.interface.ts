@@ -20,9 +20,15 @@ export interface ScheduleMatchData {
   kickoffAt: Date;
 }
 
+export interface MatchFilter {
+  teamId?: string;
+  championshipId?: string;
+  status?: MatchStatus;
+}
+
 export interface MatchRepository {
   create(data: ScheduleMatchData): Promise<Match>;
-  findAll(): Promise<Match[]>;
+  findAll(filter?: MatchFilter): Promise<Match[]>;
   findById(id: string): Promise<Match | null>;
   updateStatus(id: string, status: MatchStatus): Promise<void>;
   registerResult(id: string, homeScore: number, awayScore: number): Promise<void>;
