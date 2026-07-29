@@ -7,9 +7,10 @@ import { TeamsModule } from './teams/presentation/teams.module';
 import { PlayersModule } from './players/presentation/players.module';
 import { ChampionshipsModule } from './championships/presentation/championships.module';
 import { MatchesModule } from './matches/presentation/matches.module';
+import { PredictionsModule } from './predictions/presentation/predictions.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, TeamsModule, PlayersModule, ChampionshipsModule, MatchesModule],
+  imports: [PrismaModule, AuthModule, TeamsModule, PlayersModule, ChampionshipsModule, MatchesModule, PredictionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
