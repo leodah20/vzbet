@@ -3,30 +3,28 @@ export interface MatchResult {
   awayScore: number;
 }
 
+export type PredictedOutcome = 'CASA' | 'EMPATE' | 'FORA';
+
 export interface PredictionGuess {
-  predictedHome: number;
-  predictedAway: number;
+  predictedOutcome: PredictedOutcome;
+  predictedHome: number | null;
+  predictedAway: number | null;
 }
 
-type Outcome = 'HOME' | 'AWAY' | 'DRAW';
-
-function outcomeOf(home: number, away: number): Outcome {
-  if (home > away) return 'HOME';
-  if (home < away) return 'AWAY';
-  return 'DRAW';
+function outcomeOf(home: number, away: number): PredictedOutcome {
+  if (home > away) return 'CASA';
+  if (home < away) return 'FORA';
+  return 'EMPATE';
 }
 
 export function calculatePredictionPoints(guess: PredictionGuess, result: MatchResult): number {
-  const isExactScore = guess.predictedHome === result.homeScore && guess.predictedAway === result.awayScore;
-  if (isExactScore) {
-    return 3;
-  }
-
-  const guessedOutcome = outcomeOf(guess.predictedHome, guess.predictedAway);
   const actualOutcome = outcomeOf(result.homeScore, result.awayScore);
-  if (guessedOutcome === actualOutcome) {
-    return 1;
+  const isMultipla = guess.predictedHome !== null && guess.predictedAway !== null;
+
+  if (!isMultipla) {
+    return guess.predictedOutcome === actualOutcome ? 3 : 0;
   }
 
-  return 0;
+  const scoreCorrect = guess.predictedHome === result.homeScore && guess.predictedAway === result.awayScore;
+  return scoreCorrect ? 7 : 0;
 }
