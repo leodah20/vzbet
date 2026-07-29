@@ -1,5 +1,7 @@
 # VZBet
 
+📍 [Mapa interativo da arquitetura](https://claude.ai/code/artifact/11f4c693-f7b1-432b-8667-3ba8368a08cc) — visão geral navegável do backend (camadas, módulos, dados, endpoints, decisões).
+
 App de palpites de placar para times de futebol de várzea (amador/local). Torcedores dão o palpite do placar de cada partida, ganham pontos conforme a regra abaixo, e disputam um ranking. O app nunca movimenta dinheiro real — qualquer prêmio é combinado pelo grupo por fora.
 
 ## Regra de pontuação
