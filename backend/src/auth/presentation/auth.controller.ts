@@ -3,6 +3,7 @@ import {
   ConflictException,
   Controller,
   Inject,
+  Logger,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -16,6 +17,8 @@ import type { UserRepository } from '../domain/user-repository.interface';
 
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
+
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
@@ -27,8 +30,12 @@ export class AuthController {
     try {
       const user = await useCase.execute(dto);
       return { id: user.id, name: user.name, email: user.email, role: user.role };
-    } catch {
-      throw new ConflictException('Email already registered');
+    } catch (error) {
+      if (error instanceof Error && error.message === 'Email already registered') {
+        throw new ConflictException('Email already registered');
+      }
+      this.logger.error('Unexpected error during user registration', error instanceof Error ? error.stack : error);
+      throw error;
     }
   }
 
