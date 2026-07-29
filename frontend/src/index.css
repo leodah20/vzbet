@@ -5,3 +5,13 @@
   --color-brand-blue-dark: #1e3a8a;
   --color-brand-surface: #f8fafc;
 }
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-brand-surface);
+  color: var(--color-brand-blue-dark);
+}
