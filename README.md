@@ -35,6 +35,15 @@ npm test
 
 ## Documentação
 
+- [Arquitetura](docs/architecture.md) — visão geral, diagrama, camadas, decisões-chave
+- [Padrões de código](docs/coding-standards.md)
+- [Diagrama ER](docs/entity-relationship-diagram.md)
 - [Casos de uso](docs/use-cases.md)
-- [Diagrama ER](docs/er-diagram.md)
-- [Spec de design](docs/superpowers/specs/2026-07-28-var-apostas-varzea-design.md)
+- [Fluxo de palpite](docs/flowcharts/prediction-flow.md)
+- [Legal & Compliance](docs/legal-compliance.md)
+- [Setup de desenvolvimento](docs/dev-setup.md)
+- [Decisões e planejamento](docs/decisions-and-planning.md)
+- [Deploy do backend na nuvem](docs/deploy-backend-cloud.md)
+- [Debug log](docs/debug-log.md)
+- [Changelog](docs/changelog.md)
+- [Spec de design original](docs/superpowers/specs/2026-07-28-var-apostas-varzea-design.md)
