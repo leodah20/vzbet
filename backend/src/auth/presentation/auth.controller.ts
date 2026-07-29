@@ -1,4 +1,11 @@
-import { Body, Controller, Inject, Post, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Inject,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -17,8 +24,12 @@ export class AuthController {
   @Post('register')
   async register(@Body() dto: RegisterUserDto) {
     const useCase = new RegisterUserUseCase(this.userRepository);
-    const user = await useCase.execute(dto);
-    return { id: user.id, name: user.name, email: user.email, role: user.role };
+    try {
+      const user = await useCase.execute(dto);
+      return { id: user.id, name: user.name, email: user.email, role: user.role };
+    } catch {
+      throw new ConflictException('Email already registered');
+    }
   }
 
   @Post('login')
