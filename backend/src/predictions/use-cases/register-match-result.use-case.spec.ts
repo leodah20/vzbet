@@ -42,4 +42,17 @@ describe('RegisterMatchResultUseCase', () => {
     );
     expect(matchRepository.registerResult).not.toHaveBeenCalled();
   });
+
+  it('throws when the match was cancelled', async () => {
+    const predictionRepository = makePredictionRepository();
+    const matchRepository = makeMatchRepository();
+    matchRepository.findById.mockResolvedValue({ ...scheduledMatch, status: 'CANCELADA' });
+    const useCase = new RegisterMatchResultUseCase(matchRepository, predictionRepository);
+
+    await expect(useCase.execute({ matchId: 'm1', homeScore: 1, awayScore: 0 })).rejects.toThrow(
+      'Cannot register a result for a cancelled match',
+    );
+    expect(matchRepository.registerResult).not.toHaveBeenCalled();
+    expect(predictionRepository.updatePoints).not.toHaveBeenCalled();
+  });
 });

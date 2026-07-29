@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import { User } from '../domain/user.entity';
 import { UserRepository } from '../domain/user-repository.interface';
+import { UnauthorizedError } from '../../shared/domain/errors';
 
 // A pre-computed bcrypt hash of no real password (cost factor 10, matching RegisterUserUseCase).
 // Compared against on every failed lookup so timing doesn't reveal whether the email is registered.
@@ -20,7 +21,7 @@ export class LoginUserUseCase {
     const passwordMatches = await bcrypt.compare(input.password, passwordHash);
 
     if (!user || !passwordMatches) {
-      throw new Error('Invalid credentials');
+      throw new UnauthorizedError('Invalid credentials');
     }
 
     return user;

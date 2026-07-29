@@ -23,6 +23,9 @@ export class RegisterMatchResultUseCase {
     if (match.status === 'FINALIZADA') {
       throw new ValidationError('Match result was already registered');
     }
+    if (match.status === 'CANCELADA') {
+      throw new ValidationError('Cannot register a result for a cancelled match');
+    }
     if (data.homeScore < 0 || data.awayScore < 0) {
       throw new ValidationError('Score cannot be negative');
     }

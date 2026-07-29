@@ -1,10 +1,12 @@
-import { IsDateString, IsIn, IsString } from 'class-validator';
+import { IsDateString, IsIn, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateChampionshipDto {
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   season: string;
 
   @IsIn(['PONTOS_CORRIDOS', 'MATA_MATA'])
