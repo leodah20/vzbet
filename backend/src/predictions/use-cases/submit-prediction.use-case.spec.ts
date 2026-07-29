@@ -9,13 +9,12 @@ describe('SubmitPredictionUseCase', () => {
       upsert: jest.fn(),
       findByMatchId: jest.fn(),
       findByUserId: jest.fn(),
-      updatePoints: jest.fn(),
       registerResultAndScorePredictions: jest.fn(),
       findScoredPredictions: jest.fn(),
     };
   }
   function makeMatchRepository(): jest.Mocked<MatchRepository> {
-    return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn(), updateStatus: jest.fn(), registerResult: jest.fn() };
+    return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn(), updateStatus: jest.fn() };
   }
   function makeClock(fixedNow: Date): Clock {
     return { now: () => fixedNow };

@@ -31,7 +31,6 @@ export interface MatchRepository {
   findAll(filter?: MatchFilter): Promise<Match[]>;
   findById(id: string): Promise<Match | null>;
   updateStatus(id: string, status: MatchStatus): Promise<void>;
-  registerResult(id: string, homeScore: number, awayScore: number): Promise<void>;
 }
 
 export const MATCH_REPOSITORY = Symbol('MATCH_REPOSITORY');

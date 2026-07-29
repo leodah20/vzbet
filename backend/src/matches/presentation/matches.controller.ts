@@ -12,6 +12,9 @@ import { TEAM_REPOSITORY } from '../../teams/domain/team-repository.interface';
 import type { TeamRepository } from '../../teams/domain/team-repository.interface';
 import { CHAMPIONSHIP_REPOSITORY } from '../../championships/domain/championship-repository.interface';
 import type { ChampionshipRepository } from '../../championships/domain/championship-repository.interface';
+import { ValidationError } from '../../shared/domain/errors';
+
+const VALID_MATCH_STATUSES: MatchStatus[] = ['AGENDADA', 'FINALIZADA', 'CANCELADA'];
 
 @Controller('matches')
 export class MatchesController {
@@ -25,9 +28,16 @@ export class MatchesController {
   list(
     @Query('teamId') teamId?: string,
     @Query('championshipId') championshipId?: string,
-    @Query('status') status?: MatchStatus,
+    @Query('status') status?: string,
   ) {
-    return new ListMatchesUseCase(this.matchRepository).execute({ teamId, championshipId, status });
+    if (status && !VALID_MATCH_STATUSES.includes(status as MatchStatus)) {
+      throw new ValidationError(`Invalid status: ${status}`);
+    }
+    return new ListMatchesUseCase(this.matchRepository).execute({
+      teamId,
+      championshipId,
+      status: status as MatchStatus | undefined,
+    });
   }
 
   @Post()

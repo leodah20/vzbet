@@ -3,7 +3,7 @@ import { MatchRepository } from '../domain/match-repository.interface';
 
 describe('CancelMatchUseCase', () => {
   function makeRepository(): jest.Mocked<MatchRepository> {
-    return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn(), updateStatus: jest.fn(), registerResult: jest.fn() };
+    return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn(), updateStatus: jest.fn() };
   }
   const scheduledMatch = {
     id: 'm1', championshipId: 'c', homeTeamId: 'h', awayTeamId: 'a', round: 1,

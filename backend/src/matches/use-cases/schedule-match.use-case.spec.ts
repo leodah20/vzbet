@@ -5,7 +5,7 @@ import { ChampionshipRepository } from '../../championships/domain/championship-
 
 describe('ScheduleMatchUseCase', () => {
   function makeMatchRepository(): jest.Mocked<MatchRepository> {
-    return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn(), updateStatus: jest.fn(), registerResult: jest.fn() };
+    return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn(), updateStatus: jest.fn() };
   }
   function makeTeamRepository(): jest.Mocked<TeamRepository> {
     return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn() };

@@ -22,10 +22,6 @@ export class PrismaPredictionRepository implements PredictionRepository {
     return this.prisma.prediction.findMany({ where: { userId } });
   }
 
-  async updatePoints(id: string, points: number): Promise<void> {
-    await this.prisma.prediction.update({ where: { id }, data: { pointsEarned: points } });
-  }
-
   // This repository is nominally about predictions, but registering a match result and scoring
   // every prediction for that match must be a single atomic write across the Match and Prediction
   // tables (PrismaService is @Global(), so it's available here) — so the transaction is

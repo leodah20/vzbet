@@ -28,8 +28,4 @@ export class PrismaMatchRepository implements MatchRepository {
   async updateStatus(id: string, status: MatchStatus): Promise<void> {
     await this.prisma.match.update({ where: { id }, data: { status } });
   }
-
-  async registerResult(id: string, homeScore: number, awayScore: number): Promise<void> {
-    await this.prisma.match.update({ where: { id }, data: { homeScore, awayScore, status: 'FINALIZADA' } });
-  }
 }
