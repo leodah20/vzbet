@@ -9,7 +9,11 @@ export class PrismaPredictionRepository implements PredictionRepository {
   upsert(data: SubmitPredictionData): Promise<Prediction> {
     return this.prisma.prediction.upsert({
       where: { userId_matchId: { userId: data.userId, matchId: data.matchId } },
-      update: { predictedHome: data.predictedHome, predictedAway: data.predictedAway },
+      update: {
+        predictedOutcome: data.predictedOutcome,
+        predictedHome: data.predictedHome,
+        predictedAway: data.predictedAway,
+      },
       create: data,
     });
   }

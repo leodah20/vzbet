@@ -1,17 +1,21 @@
+export type PredictedOutcome = 'CASA' | 'EMPATE' | 'FORA';
+
 export interface Prediction {
   id: string;
   userId: string;
   matchId: string;
-  predictedHome: number;
-  predictedAway: number;
+  predictedOutcome: PredictedOutcome;
+  predictedHome: number | null;
+  predictedAway: number | null;
   pointsEarned: number | null;
 }
 
 export interface SubmitPredictionData {
   userId: string;
   matchId: string;
-  predictedHome: number;
-  predictedAway: number;
+  predictedOutcome: PredictedOutcome;
+  predictedHome: number | null;
+  predictedAway: number | null;
 }
 
 export interface RankingEntry {
