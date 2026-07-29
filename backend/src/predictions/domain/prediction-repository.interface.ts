@@ -29,7 +29,7 @@ export interface PredictionRepository {
     result: { homeScore: number; awayScore: number },
     scoredPredictions: { predictionId: string; points: number }[],
   ): Promise<void>;
-  getRanking(): Promise<RankingEntry[]>;
+  findScoredPredictions(championshipId?: string): Promise<{ userId: string; userName: string; points: number }[]>;
 }
 
 export const PREDICTION_REPOSITORY = Symbol('PREDICTION_REPOSITORY');

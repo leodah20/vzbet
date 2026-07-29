@@ -5,7 +5,13 @@ import { Clock } from '../../shared/domain/clock.interface';
 
 describe('SubmitPredictionUseCase', () => {
   function makePredictionRepository(): jest.Mocked<PredictionRepository> {
-    return { upsert: jest.fn(), findByMatchId: jest.fn(), updatePoints: jest.fn(), getRanking: jest.fn() };
+    return {
+      upsert: jest.fn(),
+      findByMatchId: jest.fn(),
+      updatePoints: jest.fn(),
+      registerResultAndScorePredictions: jest.fn(),
+      findScoredPredictions: jest.fn(),
+    };
   }
   function makeMatchRepository(): jest.Mocked<MatchRepository> {
     return { create: jest.fn(), findAll: jest.fn(), findById: jest.fn(), updateStatus: jest.fn(), registerResult: jest.fn() };

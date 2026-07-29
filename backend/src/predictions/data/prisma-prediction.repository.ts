@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Prediction, PredictionRepository, RankingEntry, SubmitPredictionData } from '../domain/prediction-repository.interface';
+import { Prediction, PredictionRepository, SubmitPredictionData } from '../domain/prediction-repository.interface';
 
 @Injectable()
 export class PrismaPredictionRepository implements PredictionRepository {
@@ -43,23 +43,19 @@ export class PrismaPredictionRepository implements PredictionRepository {
     ]);
   }
 
-  async getRanking(): Promise<RankingEntry[]> {
+  async findScoredPredictions(championshipId?: string): Promise<{ userId: string; userName: string; points: number }[]> {
     const predictions = await this.prisma.prediction.findMany({
-      where: { pointsEarned: { not: null } },
+      where: {
+        pointsEarned: { not: null },
+        ...(championshipId ? { match: { championshipId } } : {}),
+      },
       include: { user: true },
     });
 
-    const totals = new Map<string, RankingEntry>();
-    for (const prediction of predictions) {
-      const existing = totals.get(prediction.userId);
-      const points = prediction.pointsEarned ?? 0;
-      if (existing) {
-        existing.totalPoints += points;
-      } else {
-        totals.set(prediction.userId, { userId: prediction.userId, userName: prediction.user.name, totalPoints: points });
-      }
-    }
-
-    return Array.from(totals.values()).sort((a, b) => b.totalPoints - a.totalPoints);
+    return predictions.map((prediction) => ({
+      userId: prediction.userId,
+      userName: prediction.user.name,
+      points: prediction.pointsEarned ?? 0,
+    }));
   }
 }

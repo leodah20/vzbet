@@ -9,7 +9,7 @@ describe('RegisterMatchResultUseCase', () => {
       findByMatchId: jest.fn(),
       updatePoints: jest.fn(),
       registerResultAndScorePredictions: jest.fn(),
-      getRanking: jest.fn(),
+      findScoredPredictions: jest.fn(),
     };
   }
   function makeMatchRepository(): jest.Mocked<MatchRepository> {
