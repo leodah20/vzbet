@@ -10,6 +10,7 @@ export function NavBar() {
 
   return (
     <nav className="flex flex-wrap justify-center gap-4 bg-brand-blue p-3 text-white">
+      <Link to="/">Painel</Link>
       <Link to="/partidas">Partidas</Link>
       <Link to="/campeonatos">Campeonatos</Link>
       <Link to="/ranking">Ranking</Link>

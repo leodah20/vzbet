@@ -19,7 +19,7 @@ export function LoginPage() {
     try {
       const { accessToken } = await login({ email, password })
       auth.login(accessToken)
-      navigate('/partidas')
+      navigate('/')
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Erro inesperado ao entrar.')
     } finally {

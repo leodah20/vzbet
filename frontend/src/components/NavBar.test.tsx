@@ -36,6 +36,7 @@ describe('NavBar', () => {
       </AuthProvider>,
     )
 
+    expect(screen.getByText('Painel')).toBeInTheDocument()
     expect(screen.getByText('Partidas')).toBeInTheDocument()
     expect(screen.getByText('Campeonatos')).toBeInTheDocument()
     expect(screen.getByText('Meus Palpites')).toBeInTheDocument()

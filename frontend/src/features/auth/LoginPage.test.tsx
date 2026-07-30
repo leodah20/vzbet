@@ -12,7 +12,7 @@ function encodeFakeJwt(payload: object): string {
 }
 
 describe('LoginPage', () => {
-  it('logs in and navigates to /partidas on success', async () => {
+  it('logs in and navigates to / on success', async () => {
     const user = userEvent.setup()
     vi.spyOn(authApi, 'login').mockResolvedValue({
       accessToken: encodeFakeJwt({ sub: 'u-1', role: 'TORCEDOR' }),
@@ -23,7 +23,7 @@ describe('LoginPage', () => {
         <MemoryRouter initialEntries={['/login']}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/partidas" element={<p>Partidas agendadas</p>} />
+            <Route path="/" element={<p>Painel inicial</p>} />
           </Routes>
         </MemoryRouter>
       </AuthProvider>,
@@ -33,7 +33,7 @@ describe('LoginPage', () => {
     await user.type(screen.getByLabelText('Senha'), 'senha1234')
     await user.click(screen.getByRole('button', { name: 'Entrar' }))
 
-    expect(await screen.findByText('Partidas agendadas')).toBeInTheDocument()
+    expect(await screen.findByText('Painel inicial')).toBeInTheDocument()
     expect(localStorage.getItem('vzbet_token')).not.toBeNull()
   })
 })
