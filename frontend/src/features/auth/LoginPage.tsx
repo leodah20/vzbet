@@ -33,7 +33,7 @@ export function LoginPage() {
       <label className="flex flex-col gap-1">
         Email
         <input
-          type="email"
+          type="text"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
