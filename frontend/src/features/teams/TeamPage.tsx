@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { getTeam, listTeams } from '../../api/teams'
 import { listMatches } from '../../api/matches'
 import { listPlayersByTeam } from '../../api/players'
+import { TeamCrest } from '../../components/TeamCrest'
 import type { Match } from '../../types/api'
 
 export function TeamPage() {
@@ -44,8 +45,13 @@ export function TeamPage() {
 
   return (
     <div className="mx-auto max-w-2xl p-4">
-      <h1 className="text-xl font-bold text-brand-blue-dark">{teamQuery.data?.name}</h1>
-      <p className="text-sm text-slate-500">{teamQuery.data?.region}</p>
+      <div className="flex items-center gap-3">
+        <TeamCrest teamName={teamQuery.data?.name ?? ''} size={56} />
+        <div>
+          <h1 className="text-xl font-bold text-brand-blue-dark">{teamQuery.data?.name}</h1>
+          <p className="text-sm text-slate-500">{teamQuery.data?.region}</p>
+        </div>
+      </div>
 
       <h2 className="mt-4 font-semibold text-brand-blue-dark">Elenco</h2>
       {(playersQuery.data ?? []).length === 0 ? (

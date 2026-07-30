@@ -4,6 +4,7 @@ import { listChampionships } from '../../api/championships'
 import { listMatches } from '../../api/matches'
 import { listTeams } from '../../api/teams'
 import { calculateStandings } from '../../lib/standings'
+import { TeamCrest } from '../../components/TeamCrest'
 
 export function ClassificacaoPage() {
   const { id } = useParams<{ id: string }>()
@@ -44,7 +45,8 @@ export function ClassificacaoPage() {
           {standings.map((entry) => (
             <tr key={entry.teamId} className="border-b border-brand-blue/10">
               <td className="py-2 font-medium text-brand-blue-dark">
-                <Link to={`/times/${entry.teamId}`} className="hover:underline">
+                <Link to={`/times/${entry.teamId}`} className="flex items-center gap-2 hover:underline">
+                  <TeamCrest teamName={entry.teamName} size={24} />
                   {entry.teamName}
                 </Link>
               </td>

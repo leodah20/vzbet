@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { TeamCrest } from '../../components/TeamCrest'
 import type { Match, PredictedOutcome, Prediction } from '../../types/api'
 
 interface MatchCardProps {
@@ -50,12 +51,20 @@ export function MatchCard({
         <span>{new Date(match.kickoffAt).toLocaleString('pt-BR')}</span>
         {deadlinePassed && <span className="font-semibold text-red-600">Prazo encerrado</span>}
       </div>
-      <div className="mt-2 flex items-center justify-center gap-2 text-sm font-medium">
-        <Link to={`/times/${match.homeTeamId}`} className="text-brand-blue-dark hover:underline">
+      <div className="mt-2 flex items-center justify-center gap-3 text-sm font-medium">
+        <Link
+          to={`/times/${match.homeTeamId}`}
+          className="flex flex-col items-center gap-1 text-brand-blue-dark hover:underline"
+        >
+          <TeamCrest teamName={homeTeamName} size={32} />
           {homeTeamName}
         </Link>
         <span className="text-slate-400">x</span>
-        <Link to={`/times/${match.awayTeamId}`} className="text-brand-blue-dark hover:underline">
+        <Link
+          to={`/times/${match.awayTeamId}`}
+          className="flex flex-col items-center gap-1 text-brand-blue-dark hover:underline"
+        >
+          <TeamCrest teamName={awayTeamName} size={32} />
           {awayTeamName}
         </Link>
       </div>
