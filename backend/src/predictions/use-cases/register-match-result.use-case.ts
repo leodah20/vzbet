@@ -34,7 +34,11 @@ export class RegisterMatchResultUseCase {
     const scoredPredictions = predictions.map((prediction) => ({
       predictionId: prediction.id,
       points: calculatePredictionPoints(
-        { predictedHome: prediction.predictedHome, predictedAway: prediction.predictedAway },
+        {
+          predictedOutcome: prediction.predictedOutcome,
+          predictedHome: prediction.predictedHome,
+          predictedAway: prediction.predictedAway,
+        },
         { homeScore: data.homeScore, awayScore: data.awayScore },
       ),
     }));

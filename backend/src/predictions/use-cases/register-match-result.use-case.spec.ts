@@ -25,8 +25,8 @@ describe('RegisterMatchResultUseCase', () => {
     const matchRepository = makeMatchRepository();
     matchRepository.findById.mockResolvedValue(scheduledMatch);
     predictionRepository.findByMatchId.mockResolvedValue([
-      { id: 'p1', userId: 'u1', matchId: 'm1', predictedHome: 2, predictedAway: 1, pointsEarned: null },
-      { id: 'p2', userId: 'u2', matchId: 'm1', predictedHome: 0, predictedAway: 0, pointsEarned: null },
+      { id: 'p1', userId: 'u1', matchId: 'm1', predictedOutcome: 'CASA', predictedHome: 2, predictedAway: 1, pointsEarned: null },
+      { id: 'p2', userId: 'u2', matchId: 'm1', predictedOutcome: 'EMPATE', predictedHome: null, predictedAway: null, pointsEarned: null },
     ]);
     const useCase = new RegisterMatchResultUseCase(matchRepository, predictionRepository);
 
@@ -37,7 +37,7 @@ describe('RegisterMatchResultUseCase', () => {
       'm1',
       { homeScore: 2, awayScore: 1 },
       [
-        { predictionId: 'p1', points: 3 },
+        { predictionId: 'p1', points: 7 },
         { predictionId: 'p2', points: 0 },
       ],
     );
