@@ -40,8 +40,8 @@ export function MatchesPage() {
           awayTeamName={teamNames.get(match.awayTeamId) ?? 'Time'}
           existingPrediction={predictionsByMatch.get(match.id)}
           isSubmitting={submitMutation.isPending}
-          onSubmit={(predictedHome, predictedAway) =>
-            submitMutation.mutate({ matchId: match.id, predictedHome, predictedAway })
+          onSubmit={(predictedOutcome, predictedHome, predictedAway) =>
+            submitMutation.mutate({ matchId: match.id, predictedOutcome, predictedHome, predictedAway })
           }
         />
       ))}
