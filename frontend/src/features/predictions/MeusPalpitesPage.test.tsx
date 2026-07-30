@@ -60,4 +60,29 @@ describe('MeusPalpitesPage', () => {
     expect(screen.getByText('Ousadia na múltipla')).toBeInTheDocument()
     expect(screen.getByText('Ranking geral')).toBeInTheDocument()
   })
+
+  it('renders the points-progression chart above the history list', async () => {
+    vi.spyOn(predictionsApi, 'listMyPredictions').mockResolvedValue([
+      { id: 'p1', matchId: 'm1', predictedOutcome: 'CASA', predictedHome: 2, predictedAway: 1, pointsEarned: 7 },
+    ])
+    vi.spyOn(matchesApi, 'listMatches').mockResolvedValue([
+      {
+        id: 'm1', championshipId: 'c1', homeTeamId: 'team-1', awayTeamId: 'team-2', round: 1,
+        kickoffAt: '2026-06-01T15:00:00.000Z', homeScore: 2, awayScore: 1, status: 'FINALIZADA',
+      },
+    ])
+    vi.spyOn(teamsApi, 'listTeams').mockResolvedValue([
+      { id: 'team-1', name: 'Leões', region: 'Ferraz de Vasconcelos', foundedYear: null, logoUrl: null, description: null },
+      { id: 'team-2', name: 'Tigres', region: 'Ferraz de Vasconcelos', foundedYear: null, logoUrl: null, description: null },
+    ])
+    vi.spyOn(rankingApi, 'getRanking').mockResolvedValue([
+      { userId: 'user-1', userName: 'Torcedor Demo', totalPoints: 7 },
+    ])
+
+    renderWithProviders()
+
+    await waitFor(() => {
+      expect(screen.getByTestId('points-progression-chart')).toBeInTheDocument()
+    })
+  })
 })

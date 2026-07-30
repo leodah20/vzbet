@@ -6,8 +6,10 @@ import { getRanking } from '../../api/ranking'
 import { calculatePerformanceSummary } from '../../lib/performance'
 import { calculateBadges } from '../../lib/badges'
 import { useBadgeCelebration } from '../../lib/useBadgeCelebration'
+import { calculatePointsProgression } from '../../lib/pointsProgression'
 import { useAuth } from '../../context/AuthContext'
 import { BadgeCard } from '../../components/BadgeCard'
+import { PointsProgressionChart } from './PointsProgressionChart'
 
 export function MeusPalpitesPage() {
   const { user } = useAuth()
@@ -31,6 +33,7 @@ export function MeusPalpitesPage() {
   const matchesById = new Map((matchesQuery.data ?? []).map((match) => [match.id, match]))
   const teamNames = new Map((teamsQuery.data ?? []).map((team) => [team.id, team.name]))
   const summary = calculatePerformanceSummary(predictions)
+  const progression = calculatePointsProgression(predictions, matchesQuery.data ?? [])
 
   const rows = predictions
     .map((prediction) => ({ prediction, match: matchesById.get(prediction.matchId) }))
@@ -64,6 +67,10 @@ export function MeusPalpitesPage() {
           <p className="font-semibold text-brand-blue-dark">{summary.longestStreak}</p>
           <p className="text-slate-500">maior sequência</p>
         </div>
+      </div>
+
+      <div className="mt-4">
+        <PointsProgressionChart data={progression} />
       </div>
 
       <ul className="mt-4 flex flex-col gap-2">
