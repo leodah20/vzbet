@@ -41,18 +41,22 @@ export interface Match {
   status: MatchStatus
 }
 
+export type PredictedOutcome = 'CASA' | 'EMPATE' | 'FORA'
+
 export interface Prediction {
   id: string
   matchId: string
-  predictedHome: number
-  predictedAway: number
+  predictedOutcome: PredictedOutcome
+  predictedHome: number | null
+  predictedAway: number | null
   pointsEarned: number | null
 }
 
 export interface SubmitPredictionPayload {
   matchId: string
-  predictedHome: number
-  predictedAway: number
+  predictedOutcome: PredictedOutcome
+  predictedHome: number | null
+  predictedAway: number | null
 }
 
 export interface RankingEntry {

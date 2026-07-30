@@ -15,11 +15,12 @@ describe('predictions api', () => {
     const spy = vi.spyOn(client, 'apiFetch').mockResolvedValue({
       id: '1',
       matchId: 'match-1',
+      predictedOutcome: 'CASA',
       predictedHome: 2,
       predictedAway: 1,
       pointsEarned: null,
     })
-    const payload = { matchId: 'match-1', predictedHome: 2, predictedAway: 1 }
+    const payload = { matchId: 'match-1', predictedOutcome: 'CASA' as const, predictedHome: 2, predictedAway: 1 }
 
     await submitPrediction(payload)
 
