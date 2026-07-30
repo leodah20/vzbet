@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import type { ReactElement } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import * as championshipsApi from '../../api/championships'
 import * as matchesApi from '../../api/matches'

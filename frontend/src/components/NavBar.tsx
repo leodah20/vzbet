@@ -9,9 +9,11 @@ export function NavBar() {
   }
 
   return (
-    <nav className="flex justify-center gap-6 bg-brand-blue p-3 text-white">
+    <nav className="flex flex-wrap justify-center gap-4 bg-brand-blue p-3 text-white">
       <Link to="/partidas">Partidas</Link>
+      <Link to="/campeonatos">Campeonatos</Link>
       <Link to="/ranking">Ranking</Link>
+      <Link to="/meus-palpites">Meus Palpites</Link>
       <button type="button" onClick={logout}>
         Sair
       </button>

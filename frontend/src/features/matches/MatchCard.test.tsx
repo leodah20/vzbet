@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 import type { Match } from '../../types/api'
 import { MatchCard } from './MatchCard'
@@ -24,14 +25,16 @@ describe('MatchCard', () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
     render(
-      <MatchCard
-        match={buildMatch()}
-        homeTeamName="Leões"
-        awayTeamName="Tigres"
-        existingPrediction={undefined}
-        onSubmit={onSubmit}
-        isSubmitting={false}
-      />,
+      <MemoryRouter>
+        <MatchCard
+          match={buildMatch()}
+          homeTeamName="Leões"
+          awayTeamName="Tigres"
+          existingPrediction={undefined}
+          onSubmit={onSubmit}
+          isSubmitting={false}
+        />
+      </MemoryRouter>,
     )
 
     await user.click(screen.getByText('Casa vence'))
@@ -44,14 +47,16 @@ describe('MatchCard', () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
     render(
-      <MatchCard
-        match={buildMatch()}
-        homeTeamName="Leões"
-        awayTeamName="Tigres"
-        existingPrediction={undefined}
-        onSubmit={onSubmit}
-        isSubmitting={false}
-      />,
+      <MemoryRouter>
+        <MatchCard
+          match={buildMatch()}
+          homeTeamName="Leões"
+          awayTeamName="Tigres"
+          existingPrediction={undefined}
+          onSubmit={onSubmit}
+          isSubmitting={false}
+        />
+      </MemoryRouter>,
     )
 
     await user.click(screen.getByText(/arriscar o placar exato/))
@@ -70,14 +75,16 @@ describe('MatchCard', () => {
 
   it('disables everything once the kickoff deadline has passed', () => {
     render(
-      <MatchCard
-        match={buildMatch({ kickoffAt: new Date(Date.now() - 60 * 60 * 1000).toISOString() })}
-        homeTeamName="Leões"
-        awayTeamName="Tigres"
-        existingPrediction={undefined}
-        onSubmit={vi.fn()}
-        isSubmitting={false}
-      />,
+      <MemoryRouter>
+        <MatchCard
+          match={buildMatch({ kickoffAt: new Date(Date.now() - 60 * 60 * 1000).toISOString() })}
+          homeTeamName="Leões"
+          awayTeamName="Tigres"
+          existingPrediction={undefined}
+          onSubmit={vi.fn()}
+          isSubmitting={false}
+        />
+      </MemoryRouter>,
     )
 
     expect(screen.getByText('Casa vence')).toBeDisabled()

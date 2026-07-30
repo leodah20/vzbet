@@ -37,6 +37,8 @@ describe('NavBar', () => {
     )
 
     expect(screen.getByText('Partidas')).toBeInTheDocument()
+    expect(screen.getByText('Campeonatos')).toBeInTheDocument()
+    expect(screen.getByText('Meus Palpites')).toBeInTheDocument()
     await user.click(screen.getByText('Sair'))
     expect(screen.queryByText('Partidas')).not.toBeInTheDocument()
   })

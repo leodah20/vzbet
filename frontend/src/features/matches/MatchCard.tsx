@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import type { Match, PredictedOutcome, Prediction } from '../../types/api'
 
 interface MatchCardProps {
@@ -49,10 +50,14 @@ export function MatchCard({
         <span>{new Date(match.kickoffAt).toLocaleString('pt-BR')}</span>
         {deadlinePassed && <span className="font-semibold text-red-600">Prazo encerrado</span>}
       </div>
-      <div className="mt-2 flex items-center justify-center gap-2 text-sm font-medium text-brand-blue-dark">
-        <span>{homeTeamName}</span>
+      <div className="mt-2 flex items-center justify-center gap-2 text-sm font-medium">
+        <Link to={`/times/${match.homeTeamId}`} className="text-brand-blue-dark hover:underline">
+          {homeTeamName}
+        </Link>
         <span className="text-slate-400">x</span>
-        <span>{awayTeamName}</span>
+        <Link to={`/times/${match.awayTeamId}`} className="text-brand-blue-dark hover:underline">
+          {awayTeamName}
+        </Link>
       </div>
       <div className="mt-3 flex justify-center gap-2">
         <button
