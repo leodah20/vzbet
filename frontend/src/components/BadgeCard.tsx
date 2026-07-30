@@ -1,3 +1,4 @@
+import { Flag, Flame, Target, Trophy } from 'lucide-react'
 import type { BadgeCategory, BadgeStatus } from '../lib/badges'
 
 const CATEGORY_LABELS: Record<BadgeCategory, string> = {
@@ -31,47 +32,15 @@ const TIER_RIBBON_CLASSES: Record<'bronze' | 'prata' | 'ouro', string> = {
 const RIBBON_CLIP_PATH = 'polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%)'
 
 function CategoryIcon({ category, className }: { category: BadgeCategory; className: string }) {
-  const shared = {
-    viewBox: '0 0 24 24',
-    fill: 'none' as const,
-    stroke: 'currentColor',
-    strokeWidth: 2,
-    strokeLinecap: 'round' as const,
-    strokeLinejoin: 'round' as const,
-    className,
-  }
-
   switch (category) {
     case 'ranking':
-      return (
-        <svg {...shared}>
-          <path d="M8 21h8" />
-          <path d="M12 17v4" />
-          <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
-          <path d="M17 5h3a2 2 0 0 1 0 4h-3" />
-          <path d="M7 5H4a2 2 0 0 0 0 4h3" />
-        </svg>
-      )
+      return <Trophy className={className} />
     case 'sequencia':
-      return (
-        <svg {...shared}>
-          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-        </svg>
-      )
+      return <Flame className={className} />
     case 'participacao':
-      return (
-        <svg {...shared}>
-          <path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c2 0 4 1.5 6 1.5s3.5-1 5-1.5v11c-1.5.5-3 1.5-5 1.5-2 0-4-1.5-6-1.5a6 6 0 0 0-4 1.3" />
-        </svg>
-      )
+      return <Flag className={className} />
     case 'multipla':
-      return (
-        <svg {...shared}>
-          <circle cx="12" cy="12" r="9" />
-          <circle cx="12" cy="12" r="5" />
-          <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-        </svg>
-      )
+      return <Target className={className} />
   }
 }
 
