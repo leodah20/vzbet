@@ -20,7 +20,7 @@ function buildMatch(overrides: Partial<Match> = {}): Match {
 }
 
 describe('MatchCard', () => {
-  it('submits the typed prediction', async () => {
+  it('submits a simple outcome-only prediction', async () => {
     const user = userEvent.setup()
     const onSubmit = vi.fn()
     render(
@@ -34,16 +34,41 @@ describe('MatchCard', () => {
       />,
     )
 
+    await user.click(screen.getByText('Casa vence'))
+    await user.click(screen.getByText('Enviar palpite'))
+
+    expect(onSubmit).toHaveBeenCalledWith('CASA', null, null)
+  })
+
+  it('locks the outcome buttons to match the typed score and submits a múltipla', async () => {
+    const user = userEvent.setup()
+    const onSubmit = vi.fn()
+    render(
+      <MatchCard
+        match={buildMatch()}
+        homeTeamName="Leões"
+        awayTeamName="Tigres"
+        existingPrediction={undefined}
+        onSubmit={onSubmit}
+        isSubmitting={false}
+      />,
+    )
+
+    await user.click(screen.getByText(/arriscar o placar exato/))
     await user.clear(screen.getByLabelText('Placar de Leões'))
     await user.type(screen.getByLabelText('Placar de Leões'), '2')
     await user.clear(screen.getByLabelText('Placar de Tigres'))
     await user.type(screen.getByLabelText('Placar de Tigres'), '1')
+
+    expect(screen.getByText('Casa vence')).toBeDisabled()
+    expect(screen.getByText('Empate')).toBeDisabled()
+
     await user.click(screen.getByText('Enviar palpite'))
 
-    expect(onSubmit).toHaveBeenCalledWith(2, 1)
+    expect(onSubmit).toHaveBeenCalledWith('CASA', 2, 1)
   })
 
-  it('disables the inputs and button once the kickoff deadline has passed', () => {
+  it('disables everything once the kickoff deadline has passed', () => {
     render(
       <MatchCard
         match={buildMatch({ kickoffAt: new Date(Date.now() - 60 * 60 * 1000).toISOString() })}
@@ -55,7 +80,7 @@ describe('MatchCard', () => {
       />,
     )
 
-    expect(screen.getByLabelText('Placar de Leões')).toBeDisabled()
+    expect(screen.getByText('Casa vence')).toBeDisabled()
     expect(screen.getByText('Prazo encerrado')).toBeInTheDocument()
   })
 })
