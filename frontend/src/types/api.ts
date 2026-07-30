@@ -68,3 +68,23 @@ export interface RankingEntry {
   userName: string
   totalPoints: number
 }
+
+export type ChampionshipFormat = 'PONTOS_CORRIDOS' | 'MATA_MATA'
+
+export interface Championship {
+  id: string
+  name: string
+  season: string
+  format: ChampionshipFormat
+  startDate: string
+  endDate: string
+}
+
+export interface Player {
+  id: string
+  name: string
+  position: string
+  number: number
+  photoUrl: string | null
+  teamId: string
+}
