@@ -3,6 +3,12 @@ import { MatchRepository } from '../../matches/domain/match-repository.interface
 import { Clock } from '../../shared/domain/clock.interface';
 import { NotFoundError, ValidationError } from '../../shared/domain/errors';
 
+function outcomeOf(home: number, away: number): 'CASA' | 'EMPATE' | 'FORA' {
+  if (home > away) return 'CASA';
+  if (home < away) return 'FORA';
+  return 'EMPATE';
+}
+
 export class SubmitPredictionUseCase {
   constructor(
     private readonly predictionRepository: PredictionRepository,
@@ -21,8 +27,21 @@ export class SubmitPredictionUseCase {
     if (this.clock.now().getTime() >= match.kickoffAt.getTime()) {
       throw new ValidationError('Prediction deadline has passed');
     }
-    if (data.predictedHome < 0 || data.predictedAway < 0) {
-      throw new ValidationError('Predicted score cannot be negative');
+
+    const hasHome = data.predictedHome !== null && data.predictedHome !== undefined;
+    const hasAway = data.predictedAway !== null && data.predictedAway !== undefined;
+    if (hasHome !== hasAway) {
+      throw new ValidationError('Both predictedHome and predictedAway must be provided together, or neither');
+    }
+
+    if (hasHome && hasAway) {
+      if (data.predictedHome! < 0 || data.predictedAway! < 0) {
+        throw new ValidationError('Predicted score cannot be negative');
+      }
+      const derivedOutcome = outcomeOf(data.predictedHome!, data.predictedAway!);
+      if (derivedOutcome !== data.predictedOutcome) {
+        throw new ValidationError('predictedOutcome is inconsistent with the predicted score');
+      }
     }
 
     return this.predictionRepository.upsert(data);

@@ -1,14 +1,25 @@
-import { IsInt, IsString, Min } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
+
+export enum PredictedOutcomeInput {
+  CASA = 'CASA',
+  EMPATE = 'EMPATE',
+  FORA = 'FORA',
+}
 
 export class SubmitPredictionDto {
   @IsString()
   matchId: string;
 
-  @IsInt()
-  @Min(0)
-  predictedHome: number;
+  @IsEnum(PredictedOutcomeInput)
+  predictedOutcome: PredictedOutcomeInput;
 
+  @IsOptional()
   @IsInt()
   @Min(0)
-  predictedAway: number;
+  predictedHome?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  predictedAway?: number;
 }

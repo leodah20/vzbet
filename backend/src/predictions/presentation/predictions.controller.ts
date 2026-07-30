@@ -25,7 +25,13 @@ export class PredictionsController {
   @Roles('TORCEDOR')
   submit(@Req() req: any, @Body() dto: SubmitPredictionDto) {
     const useCase = new SubmitPredictionUseCase(this.predictionRepository, this.matchRepository, new SystemClock());
-    return useCase.execute({ userId: req.user.userId, ...dto });
+    return useCase.execute({
+      userId: req.user.userId,
+      matchId: dto.matchId,
+      predictedOutcome: dto.predictedOutcome,
+      predictedHome: dto.predictedHome ?? null,
+      predictedAway: dto.predictedAway ?? null,
+    });
   }
 
   @Get('predictions/me')
