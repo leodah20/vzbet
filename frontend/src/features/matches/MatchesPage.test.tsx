@@ -16,8 +16,8 @@ function renderWithClient(ui: ReactElement) {
 describe('MatchesPage', () => {
   it('joins team names onto each match card', async () => {
     vi.spyOn(teamsApi, 'listTeams').mockResolvedValue([
-      { id: 'team-1', name: 'Leões' },
-      { id: 'team-2', name: 'Tigres' },
+      { id: 'team-1', name: 'Leões', region: 'Ferraz de Vasconcelos', foundedYear: null, logoUrl: null, description: null },
+      { id: 'team-2', name: 'Tigres', region: 'Ferraz de Vasconcelos', foundedYear: null, logoUrl: null, description: null },
     ])
     vi.spyOn(matchesApi, 'listMatches').mockResolvedValue([
       {
@@ -45,8 +45,8 @@ describe('MatchesPage', () => {
   it('submits the outcome and score through to the predictions API when a card is submitted', async () => {
     const user = userEvent.setup()
     vi.spyOn(teamsApi, 'listTeams').mockResolvedValue([
-      { id: 'team-1', name: 'Leões' },
-      { id: 'team-2', name: 'Tigres' },
+      { id: 'team-1', name: 'Leões', region: 'Ferraz de Vasconcelos', foundedYear: null, logoUrl: null, description: null },
+      { id: 'team-2', name: 'Tigres', region: 'Ferraz de Vasconcelos', foundedYear: null, logoUrl: null, description: null },
     ])
     vi.spyOn(matchesApi, 'listMatches').mockResolvedValue([
       {

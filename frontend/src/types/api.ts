@@ -25,6 +25,10 @@ export interface LoginResponse {
 export interface Team {
   id: string
   name: string
+  region: string
+  foundedYear: number | null
+  logoUrl: string | null
+  description: string | null
 }
 
 export type MatchStatus = 'AGENDADA' | 'FINALIZADA' | 'CANCELADA'
