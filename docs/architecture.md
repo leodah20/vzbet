@@ -11,8 +11,8 @@ championships, matches) exists to get real, validated match data safely into tha
 flowchart TB
     Device["Fan / Admin device\n(mobile or desktop browser)"]
 
-    subgraph Frontend["React PWA (planned, not started)"]
-        PWA["React + Vite, installable PWA\nno app store needed"]
+    subgraph Frontend["React PWA (installed locally, PWA packaging pending)"]
+        PWA["React 19 + Vite\n11 screens, TanStack Query\ninstallable PWA planned"]
     end
 
     subgraph API["Backend (NestJS)"]
@@ -42,7 +42,7 @@ flowchart TB
     DB[("PostgreSQL 16\n(Docker locally, Render-managed planned)")]
 
     Device --> PWA
-    PWA -. "REST calls - planned, frontend not built yet" .-> API
+    PWA -. "REST calls" .-> API
     Players --> Teams
     Matches --> Teams
     Matches --> Championships
@@ -60,7 +60,7 @@ flowchart TB
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Frontend (React + Vite PWA) | ⛔ NOT STARTED | Planned as a separate phase; no frontend code exists yet |
+| Frontend (React 19 + Vite) | ✅ DONE | 11 screens (auth, partidas, meus palpites, ranking, campeonatos, classificação, página do time, painel como home); 34 Vitest suites / 74 tests; PWA packaging (service worker/manifest) still pending |
 | Backend (NestJS, overall) | ✅ DONE | 6 feature modules + one shared cross-cutting module, all following the same Clean Architecture shape |
 | — auth module | ✅ DONE | Register (always assigns `TORCEDOR`, no `role` field on input), timing-safe login, JWT strategy + `JwtAuthGuard`/`RolesGuard` reused by every other module |
 | — teams module | ✅ DONE | Create/list/get team; rejects blank names; exports `TEAM_REPOSITORY` for players and matches to validate a team exists |
@@ -68,9 +68,11 @@ flowchart TB
 | — championships module | ✅ DONE | Create (validates `endDate > startDate`), list; format enum `PONTOS_CORRIDOS \| MATA_MATA` |
 | — matches module | ✅ DONE | Schedule (same-team/championship/home/away checks in cheapest-first order), cancel (blocks already-`FINALIZADA`), list with optional `teamId`/`championshipId`/`status` filters |
 | — predictions module (core feature) | ✅ DONE | Submit (upsert, deadline enforced via injected `Clock`), atomic result registration + scoring in one Prisma `$transaction`, ranking with tie-break, `GET /predictions/me` |
+| — frontend lib (pure functions) | ✅ DONE | `standings`, `performance`, `badges`, `pointsProgression`, `teamsAccompanied`, `teamStats`, `jwt` — all client-side, unit-tested, no backend changes |
 | — shared domain-error system | ✅ DONE | 4 typed error classes + global `DomainErrorFilter`, used consistently by every module |
 | Database (PostgreSQL 16 + Prisma 7.9.1) | ✅ DONE (local) | 6 tables / 3 enums modeled and migrated locally via Docker; Render-managed instance planned for production |
 | Tests (Jest, TDD) | ✅ DONE | 12 suites / 32 tests passing as of the last commit |
+| Tests (Vitest + RTL) | ✅ DONE | 34 suites / 74 tests passing as of the last commit |
 | Deploy (Render) | ⛔ NOT STARTED | Web Service (free tier) + Render-managed PostgreSQL planned; correct root directory/build/start commands already identified, but no deploy attempted yet |
 
 ## Backend architecture (Clean Architecture)

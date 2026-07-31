@@ -4,7 +4,7 @@
 
 ## Estado Atual (Jul 2026)
 
-### O que funciona HOJE (só o backend — frontend e deploy ainda não começaram)
+### O que funciona HOJE (backend + frontend completos — deploy ainda não começou)
 
 **✅ Backend completo, revisado e testado (Clean Architecture, 6 módulos):**
 - `auth` — registro (sempre `TORCEDOR`, sem campo `role` no input), login com JWT, `JwtAuthGuard` +
@@ -31,7 +31,24 @@ se `JWT_SECRET` não estiver setado (o app recusa subir sem ele).
 
 **✅ 12 suites / 32 testes passando** (Jest, TDD RED→GREEN) como da última revisão.
 
-**❌ Frontend:** ainda não iniciado. Planejado como React + Vite, empacotado como PWA.
+**✅ Frontend completo (React 19 + Vite + TypeScript + Tailwind 4), construído depois do backend:**
+- **11 telas**: Login, Cadastro, Painel (home após login), Partidas (com palpite embutido),
+  Meus Palpites, Ranking, Campeonatos, Classificação, Página do time, NavBar + rotas protegidas.
+- **Padrão de arquitetura:** tudo que é cálculo vive em funções puras em `frontend/src/lib/`
+  (`standings`, `performance`, `badges`, `pointsProgression`, `teamsAccompanied`, `teamStats`,
+  `jwt`) — cada uma com teste unitário próprio; componentes de tela são finos por cima, consumindo
+  as mesmas APIs do backend (TanStack Query).
+- **Features entregues** (fluxo spec → plano → TDD, documentado em
+  `docs/superpowers/specs/` + `plans/`): painel inicial com emblemas/próximos jogos/top-3/últimos
+  resultados de times acompanhados; emblemas de conquista (4 categorias, bronze/prata/ouro, confete
+  CSS puro, celebração única por navegador via `localStorage`); gráfico de evolução de pontos
+  (recharts) em Meus Palpites; ícones de emblema com lucide-react; escudo SVG com iniciais por time;
+  seção de estatísticas por time (casa/fora, médias de gols, forma recente) — os 3 pedaços do pedido
+  de "dashboards detalhados" estão prontos.
+- **34 suites / 74 testes Vitest + RTL passando** (TDD RED→GREEN, mesmo padrão do backend) e build
+  de produção limpo (`tsc --noEmit && vite build`).
+- **Seed com dados reais** de Copa Metal Ferraz e Copa das Comunidades (`backend/prisma/seed.ts`),
+  mais um script de seed de admin.
 
 **❌ Deploy:** ainda não iniciado. Alvo planejado é Render (Web Service free tier + PostgreSQL
 gerenciado), mas nada foi publicado ainda — não existe URL, não existe app rodando em lugar nenhum
@@ -94,6 +111,26 @@ além do ambiente local.
   revisão final, evitando que o primeiro deploy real tropece nesse bloqueador.
 - **Impacto:** essa é uma decisão de planejamento, ainda não uma ação concluída — nenhum backend do
   VZBet está hospedado em lugar nenhum hoje.
+
+#### 7. Frontend calcula tudo no cliente — zero mudanças de backend pós-MVP
+- **Decisão:** todas as features do frontend (classificação, desempenho, emblemas, evolução de
+  pontos, times acompanhados, estatísticas por time) são derivadas no navegador a partir dos
+  endpoints que já existem (`GET /matches`, `/teams`, `/predictions/me`, `/ranking`), em funções
+  puras testadas.
+- **Motivo:** o backend foi fechado após a revisão (Waves A/B); cada feature nova virou uma função
+  pura + testes em vez de endpoint/migration novos.
+- **Impacto:** consequências aceitas conscientemente: emblemas refletem o estado atual (sem
+  "conquistado em tal data", podem "desaparecer" se o torcedor cair do top 3), e "time acompanhado"
+  é derivado dos palpites existentes em vez de um conceito persistido de favorito.
+
+#### 8. Dependências enxutas no frontend, com duas exceções deliberadas
+- **Decisão:** `recharts` (gráfico de evolução de pontos — escolha explícita do usuário sobre o
+  hand-rolled SVG, porque já entrega tooltip/animação/eixos) e `lucide-react` (ícones de emblema
+  profissionais). Nenhuma outra dependência além de React, TanStack Query, React Router e Tailwind.
+- **Motivo:** hábito do projeto de minimizar deps; as duas exceções são as únicas justificadas por
+  valor visual/UX direto pro torcedor.
+- **Impacto:** o hand-rolled SVG continua existindo só em `TeamCrest` (escudo com iniciais — não há
+  como recriar os escudos reais das ligas).
 
 ### Prisma 7 — armadilhas já pagas
 
@@ -207,15 +244,33 @@ ferramenta:
       pós-Wave B
 - [x] **Rebrand para VZBet** — repo, remote e pasta local renomeados a partir de "Várzea Palpites"
 
+#### ✅ Concluído (frontend)
+- [x] **MVP de telas do torcedor** — login/cadastro, partidas com palpite, meus palpites, ranking,
+      campeonatos, classificação, página do time (11 telas, rotas protegidas, NavBar)
+- [x] **Painel inicial como home pós-login** — emblemas em destaque, próximos jogos, top 3 do
+      ranking, últimos resultados de times acompanhados, cada seção com "ver mais"
+- [x] **Emblemas de conquista** — 4 categorias, bronze/prata/ouro, progresso até o próximo nível,
+      celebração de desbloqueio com confete CSS puro (uma vez por navegador)
+- [x] **Gráfico de evolução de pontos** (recharts) em Meus Palpites + ícones de emblema com
+      lucide-react
+- [x] **Estatísticas extras por time** — aproveitamento casa/fora, média de gols, forma recente
+      (último dos 3 pedaços de "dashboards detalhados")
+- [x] **Escudo SVG com iniciais** por time (`TeamCrest`), usado em partidas, página do time e
+      classificação
+- [x] **34 suites / 74 testes Vitest passando** (TDD RED→GREEN) + build de produção limpo
+- [x] **Seed com resultados históricos reais** de Copa Metal Ferraz e Copa das Comunidades
+
 #### 🔵 Em aberto, rastreado (não é trabalho ativo agora)
 - [ ] Resolver o `app.e2e-spec.ts` quebrado (ts-jest + import ESM do Prisma)
 - [ ] Rate limiting em `/auth/login`
 - [ ] Restringir `app.enableCors()` a uma origem específica (hoje aceita qualquer origem)
 
 #### Curto prazo
-- [ ] Iniciar o frontend (React + Vite, empacotado como PWA)
 - [ ] Fazer o primeiro deploy do backend no Render (Web Service free tier + PostgreSQL gerenciado)
-- [ ] Restringir o CORS à origem real do frontend assim que ela existir (hoje está aberto pra qualquer origem)
+- [ ] Restringir o CORS à origem real do frontend (agora que o frontend existe e tem origem definida
+      em produção)
+- [ ] Empacotar o frontend como PWA instalável (o plano original sempre previu PWA, o código atual
+      ainda não tem service worker/manifest)
 
 #### Médio prazo
 - [ ] Endpoints de update/delete (CRUD completo) para teams, players, championships e matches
@@ -240,7 +295,14 @@ npm run start:dev
 
 # Rodar os testes
 cd backend
-npm test   # 12 suites / 32 testes
+npm test   # 12 suites / 32 testes (Jest, repositórios mockados)
+
+# Frontend
+cd frontend
+npm install
+npm test        # 34 suites / 74 testes (Vitest + RTL)
+npm run build   # tsc --noEmit && vite build
+npm run dev     # dev server Vite
 
 # Git
 git add -A
@@ -255,12 +317,14 @@ git push origin main
   partidas, enviam um palpite de placar antes do apito inicial e acompanham um ranking por acerto.
 - **Marca:** VZBet, identidade visual azul e branco (sem verde), vermelho reservado só para avisos
   de risco genuíno (ex.: risco legal), nunca como decoração de marca.
-- **Escopo atual:** só o backend existe. Frontend e deploy são fases planejadas e separadas, ainda
-  não iniciadas — não há app rodando em celular nem backend hospedado em lugar nenhum hoje.
-- **Framework:** NestJS 11 + TypeScript no backend.
+- **Escopo atual:** backend e frontend completos e testados localmente. Deploy (Render) e
+  empacotamento PWA são as próximas fases — não há app rodando em celular nem backend hospedado em
+  lugar nenhum hoje.
+- **Framework:** NestJS 11 + TypeScript no backend; React 19 + Vite + Tailwind 4 no frontend.
 - **ORM/Banco:** Prisma 7.9.1 + PostgreSQL 16 (Docker localmente; Render-managed é o plano para
   produção).
-- **Testes:** Jest, disciplina TDD RED→GREEN, 12 suites / 32 testes passando.
+- **Testes:** Jest no backend (12 suites / 32 testes) e Vitest + RTL no frontend (34 suites / 74
+  testes), ambos em disciplina TDD RED→GREEN.
 - **Motivo regulatório do modelo sem dinheiro real:** Lei 14.790/2023 exige autorização SPA/MF e
   capital fora do alcance de um projeto indie para apostas de quota fixa com dinheiro real — daí o
   pivô deliberado para um jogo de pontos/ranking, com qualquer prêmio combinado fora do app.
