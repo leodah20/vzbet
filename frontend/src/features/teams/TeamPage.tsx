@@ -5,6 +5,8 @@ import { getTeam, listTeams } from '../../api/teams'
 import { listMatches } from '../../api/matches'
 import { listPlayersByTeam } from '../../api/players'
 import { TeamCrest } from '../../components/TeamCrest'
+import { FormaRecente } from '../../components/FormaRecente'
+import { calculateTeamStats } from '../../lib/teamStats'
 import type { Match } from '../../types/api'
 
 export function TeamPage() {
@@ -65,6 +67,28 @@ export function TeamPage() {
           ))}
         </ul>
       )}
+
+      <h2 className="mt-4 font-semibold text-brand-blue-dark">Estatísticas</h2>
+      {(() => {
+        const stats = calculateTeamStats(id!, allMatches)
+        return (
+          <div className="mt-2 flex flex-col gap-1 text-sm">
+            <p>
+              Casa: {stats.homeRecord.wins}V {stats.homeRecord.draws}E {stats.homeRecord.losses}D
+            </p>
+            <p>
+              Fora: {stats.awayRecord.wins}V {stats.awayRecord.draws}E {stats.awayRecord.losses}D
+            </p>
+            <p>
+              Média de gols: {stats.avgGoalsFor.toFixed(1)} marcados, {stats.avgGoalsAgainst.toFixed(1)} sofridos
+            </p>
+            <div className="flex items-center gap-2">
+              <span>Forma recente:</span>
+              <FormaRecente results={stats.recentForm} />
+            </div>
+          </div>
+        )
+      })()}
 
       <h2 className="mt-4 font-semibold text-brand-blue-dark">Próximos jogos</h2>
       <ul className="mt-2 flex flex-col gap-1">

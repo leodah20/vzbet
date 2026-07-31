@@ -53,6 +53,12 @@ describe('TeamPage', () => {
       expect(screen.getByText(/João/)).toBeInTheDocument()
     })
 
+    expect(screen.getByText('Estatísticas')).toBeInTheDocument()
+    expect(screen.getByText('Casa: 1V 1E 0D')).toBeInTheDocument()
+    expect(screen.getByText('Fora: 0V 0E 0D')).toBeInTheDocument()
+    expect(screen.getByText('Média de gols: 1.5 marcados, 1.0 sofridos')).toBeInTheDocument()
+    expect(screen.getByLabelText('Forma recente')).toBeInTheDocument()
+
     expect(screen.getAllByText('confronto direto')).toHaveLength(2)
 
     await user.click(screen.getAllByText('confronto direto')[0])
