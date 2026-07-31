@@ -46,11 +46,18 @@ const TEAM_NAMES = [
   'Bola de Neve FC',
   'EC Nacional',
   'Vila Cristina FC',
+  // Adversários encontrados na pesquisa de resultados reais da Copa das
+  // Comunidades 2025 (ver HISTORICAL_RESULTS) que ainda não tinham cadastro.
+  'União do Morro F.V',
+  'Temporim',
+  'Galáticos FC',
 ];
 
-// Confrontos futuros (sem placar) para ter algo navegável no demo, sem
-// inventar resultados históricos de times reais. Datas espalhadas nas
-// próximas semanas a partir de hoje.
+// Confrontos futuros (sem placar) para ter algo navegável/apostável no demo.
+// A 1ª edição da Copa Metal Ferraz já terminou de verdade (ver
+// HISTORICAL_RESULTS) — por isso ela não tem rodadas futuras aqui, só a
+// Copa das Comunidades (cuja edição 2026 ainda não começou, pelo que a
+// pesquisa encontrou). Datas espalhadas nas próximas semanas a partir de hoje.
 const UPCOMING_FIXTURES: Array<{
   championship: string;
   home: string;
@@ -58,14 +65,54 @@ const UPCOMING_FIXTURES: Array<{
   daysFromNow: number;
   round: number;
 }> = [
-  { championship: 'Copa Metal Ferraz Municipal', home: 'Roma FC', away: 'Bola de Fogo FC', daysFromNow: 7, round: 4 },
-  { championship: 'Copa Metal Ferraz Municipal', home: 'Raça Ruim', away: 'EC União', daysFromNow: 7, round: 4 },
-  { championship: 'Copa Metal Ferraz Municipal', home: 'Jamil City', away: '100 Freio FC', daysFromNow: 8, round: 4 },
-  { championship: 'Copa Metal Ferraz Municipal', home: 'União do Jacarezinho', away: 'Favela City Leão', daysFromNow: 8, round: 4 },
-  { championship: 'Copa das Comunidades', home: 'Roma FC', away: '100 Freio FC', daysFromNow: 10, round: 1 },
-  { championship: 'Copa das Comunidades', home: 'IVS FC', away: 'União do Jacarezinho', daysFromNow: 10, round: 1 },
-  { championship: 'Copa das Comunidades', home: 'EC União', away: 'Santa Rosa FC', daysFromNow: 11, round: 1 },
-  { championship: 'Copa das Comunidades', home: 'Bola de Neve FC', away: 'Vila Santo Antônio', daysFromNow: 11, round: 1 },
+  { championship: 'Copa das Comunidades', home: 'Roma FC', away: '100 Freio FC', daysFromNow: 10, round: 4 },
+  { championship: 'Copa das Comunidades', home: 'IVS FC', away: 'União do Jacarezinho', daysFromNow: 10, round: 4 },
+  { championship: 'Copa das Comunidades', home: 'EC União', away: 'Santa Rosa FC', daysFromNow: 11, round: 4 },
+  { championship: 'Copa das Comunidades', home: 'Bola de Neve FC', away: 'Vila Santo Antônio', daysFromNow: 11, round: 4 },
+];
+
+// Resultados históricos REAIS, encontrados via pesquisa pública (busca web +
+// redes sociais dos times) a pedido do cliente. Cada item cita a fonte usada
+// para chegar no placar — nada aqui foi inventado. Nomes de times foram
+// mapeados pro cadastro já existente quando o nome variava entre fontes
+// (ex.: "100 Freios" -> "100 Freio FC", "ST Antônio" -> "Vila Santo Antônio").
+//
+// Fontes:
+// - Copa Metal Ferraz: Câmara Municipal de Ferraz de Vasconcelos, matéria
+//   "Teteco comemora o sucesso da 1ª Copa Metal Ferraz de futebol amador"
+//   (camaraferraz.sp.gov.br), confirmada de forma cruzada por múltiplas
+//   buscas independentes.
+// - Copa das Comunidades: plataforma oficial de gestão de campeonato
+//   JogaFácil, campeonato "Liga de Ferraz - Copa das Comunidades"
+//   (campeonato.jogafacilapp.com, campeonatoId=1400), temporada 2025 —
+//   classificação de grupos, súmulas de jogos e súmula da final local.
+//   "Bola de Neve FC" aparece na tabela oficial do JogaFácil como time
+//   competidor; não foi possível confirmar de forma independente se é a
+//   mesma entidade do perfil social de mesmo nome.
+const HISTORICAL_RESULTS: Array<{
+  championship: string;
+  home: string;
+  away: string;
+  homeScore: number;
+  awayScore: number;
+  date: string;
+  hour: number;
+  minute: number;
+  round: number;
+}> = [
+  // Copa Metal Ferraz Municipal — final da 1ª edição (2026)
+  { championship: 'Copa Metal Ferraz Municipal', home: 'Raça Ruim', away: 'Bola de Fogo FC', homeScore: 5, awayScore: 0, date: '2026-07-24', hour: 15, minute: 0, round: 1 },
+  // Copa das Comunidades — fase de grupos 2025 (rodada 1, 07/09/2025)
+  { championship: 'Copa das Comunidades', home: 'Bola de Neve FC', away: 'Leões do Norte', homeScore: 1, awayScore: 0, date: '2025-09-07', hour: 15, minute: 0, round: 1 },
+  { championship: 'Copa das Comunidades', home: 'Vila Santo Antônio', away: 'EC Nacional', homeScore: 1, awayScore: 0, date: '2025-09-07', hour: 15, minute: 0, round: 1 },
+  { championship: 'Copa das Comunidades', home: 'União do Morro F.V', away: 'Unidos da Paraíba', homeScore: 2, awayScore: 0, date: '2025-09-07', hour: 15, minute: 0, round: 1 },
+  // Copa das Comunidades — fase de grupos 2025 (rodada 2, 14/09/2025)
+  { championship: 'Copa das Comunidades', home: 'Bola de Fogo FC', away: 'Temporim', homeScore: 3, awayScore: 1, date: '2025-09-14', hour: 15, minute: 0, round: 2 },
+  { championship: 'Copa das Comunidades', home: '100 Freio FC', away: 'Roma FC', homeScore: 0, awayScore: 0, date: '2025-09-14', hour: 15, minute: 0, round: 2 },
+  { championship: 'Copa das Comunidades', home: 'IVS FC', away: 'AE Avenida', homeScore: 0, awayScore: 0, date: '2025-09-14', hour: 15, minute: 0, round: 2 },
+  { championship: 'Copa das Comunidades', home: 'União do Jacarezinho', away: 'Galáticos FC', homeScore: 2, awayScore: 1, date: '2025-09-14', hour: 15, minute: 0, round: 2 },
+  // Copa das Comunidades — final local de Ferraz (09/10/2025, Campo Raspadão)
+  { championship: 'Copa das Comunidades', home: '100 Freio FC', away: 'União do Jacarezinho', homeScore: 0, awayScore: 1, date: '2025-10-09', hour: 9, minute: 0, round: 3 },
 ];
 
 async function main() {
@@ -127,6 +174,30 @@ async function main() {
         round: fixture.round,
         kickoffAt,
         status: 'AGENDADA',
+      },
+    });
+  }
+
+  console.log(`Cadastrando ${HISTORICAL_RESULTS.length} resultados históricos reais...`);
+  for (const result of HISTORICAL_RESULTS) {
+    const championship = championshipsByName.get(result.championship);
+    const homeTeam = teamsByName.get(result.home);
+    const awayTeam = teamsByName.get(result.away);
+    if (!championship || !homeTeam || !awayTeam) {
+      throw new Error(`Resultado histórico referencia time/campeonato inexistente: ${JSON.stringify(result)}`);
+    }
+    const [year, month, day] = result.date.split('-').map(Number);
+    const kickoffAt = new Date(year, month - 1, day, result.hour, result.minute, 0, 0);
+    await prisma.match.create({
+      data: {
+        championshipId: championship.id,
+        homeTeamId: homeTeam.id,
+        awayTeamId: awayTeam.id,
+        round: result.round,
+        kickoffAt,
+        homeScore: result.homeScore,
+        awayScore: result.awayScore,
+        status: 'FINALIZADA',
       },
     });
   }
